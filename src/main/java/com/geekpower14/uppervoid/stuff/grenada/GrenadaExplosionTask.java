@@ -23,16 +23,14 @@ import org.bukkit.scheduler.BukkitRunnable;
  * You should have received a copy of the GNU General Public License
  * along with Uppervoid.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class GrenadaExplosionTask extends BukkitRunnable
-{
+public class GrenadaExplosionTask extends BukkitRunnable {
     private final Uppervoid plugin;
     private final Grenada grenada;
     private final Item tnt;
 
     private double time;
 
-    public GrenadaExplosionTask(Uppervoid plugin, Grenada grenada, Item tnt)
-    {
+    public GrenadaExplosionTask(Uppervoid plugin, Grenada grenada, Item tnt) {
         this.plugin = plugin;
         this.grenada = grenada;
         this.tnt = tnt;
@@ -41,24 +39,21 @@ public class GrenadaExplosionTask extends BukkitRunnable
     }
 
     @Override
-    public void run()
-    {
-        if(this.tnt == null || this.tnt.isDead())
-        {
+    public void run() {
+        if (this.tnt == null || this.tnt.isDead()) {
             this.cancel();
             return;
         }
 
         float pitch = this.time % 2 == 0 ? 1.5F : 0.5F;
 
-        for(Player p : this.plugin.getServer().getOnlinePlayers())
+        for (Player p : this.plugin.getServer().getOnlinePlayers())
             p.getWorld().playSound(this.tnt.getLocation(), Sound.BLOCK_NOTE_PLING, 0.8F, pitch);
 
-        if(this.tnt.isOnGround())
+        if (this.tnt.isOnGround())
             ParticleEffect.FIREWORKS_SPARK.display(1F, 2F, 1F, 0.00005F, 5, this.tnt.getLocation(), 50);
 
-        if(this.time <= 0)
-        {
+        if (this.time <= 0) {
             this.cancel();
             this.plugin.getServer().getScheduler().runTask(this.plugin, () -> this.grenada.onItemTouchGround(this.plugin.getArena(), this.tnt));
             this.tnt.remove();

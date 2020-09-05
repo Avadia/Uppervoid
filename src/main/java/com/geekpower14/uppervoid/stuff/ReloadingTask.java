@@ -20,37 +20,31 @@ import org.bukkit.entity.Player;
  * You should have received a copy of the GNU General Public License
  * along with Uppervoid.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class ReloadingTask implements Runnable
-{
+public class ReloadingTask implements Runnable {
     private final Uppervoid plugin;
     private final ArenaPlayer arenaPlayer;
     private final Stuff stuff;
 
-    public ReloadingTask(Uppervoid plugin, ArenaPlayer arenaPlayer, Stuff stuff)
-    {
+    public ReloadingTask(Uppervoid plugin, ArenaPlayer arenaPlayer, Stuff stuff) {
         this.plugin = plugin;
         this.arenaPlayer = arenaPlayer;
         this.stuff = stuff;
     }
 
     @Override
-    public void run()
-    {
+    public void run() {
         this.stuff.setReloading(true);
 
         final long reloadingTimeStart = System.currentTimeMillis();
 
-        this.plugin.getServer().getScheduler().runTaskAsynchronously(this.plugin, new Runnable()
-        {
+        this.plugin.getServer().getScheduler().runTaskAsynchronously(this.plugin, new Runnable() {
             public boolean activeInHand = stuff.isActiveItem();
 
             @Override
-            public void run()
-            {
+            public void run() {
                 Player player = arenaPlayer.getPlayerIfOnline();
 
-                while (true)
-                {
+                while (true) {
                     boolean isActualActiveItem = stuff.isActiveItem();
 
                     float timePassed = (System.currentTimeMillis() - reloadingTimeStart);
@@ -61,19 +55,14 @@ public class ReloadingTask implements Runnable
                     if (prc >= 1)
                         break;
 
-                    if (this.activeInHand && !isActualActiveItem)
-                    {
+                    if (this.activeInHand && !isActualActiveItem) {
                         this.activeInHand = isActualActiveItem;
                         player.setExp(0);
 
                         continue;
-                    }
-                    else if (!this.activeInHand && isActualActiveItem)
-                    {
+                    } else if (!this.activeInHand && isActualActiveItem) {
                         this.activeInHand = isActualActiveItem;
-                    }
-                    else if (!this.activeInHand)
-                    {
+                    } else if (!this.activeInHand) {
                         continue;
                     }
 

@@ -23,16 +23,13 @@ import org.bukkit.inventory.ItemStack;
  * You should have received a copy of the GNU General Public License
  * along with Uppervoid.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class RepairPowerup extends UppervoidPowerup
-{
-    public RepairPowerup(Uppervoid plugin, Arena arena)
-    {
+public class RepairPowerup extends UppervoidPowerup {
+    public RepairPowerup(Uppervoid plugin, Arena arena) {
         super(plugin, arena);
     }
 
     @Override
-    public void onPickup(Player player)
-    {
+    public void onPickup(Player player) {
         player.sendMessage(ChatColor.RED + "Vous réparez maintenant les blocs sur lesquels vous marchez !");
 
         this.arena.addBuilder(player);
@@ -40,26 +37,22 @@ public class RepairPowerup extends UppervoidPowerup
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return ChatColor.RED + "Réparation du sol";
     }
 
     @Override
-    public ItemStack getIcon()
-    {
+    public ItemStack getIcon() {
         return new ItemStack(Material.BRICK, 1);
     }
 
     @Override
-    public double getWeight()
-    {
+    public double getWeight() {
         return 10;
     }
 
     @Override
-    public boolean isSpecial()
-    {
+    public boolean isSpecial() {
         return false;
     }
 }

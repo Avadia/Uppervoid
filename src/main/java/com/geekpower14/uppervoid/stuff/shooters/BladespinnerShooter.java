@@ -21,10 +21,8 @@ import org.bukkit.inventory.ItemStack;
  * You should have received a copy of the GNU General Public License
  * along with Uppervoid.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class BladespinnerShooter extends Shooter
-{
-    public BladespinnerShooter(Uppervoid plugin)
-    {
+public class BladespinnerShooter extends Shooter {
+    public BladespinnerShooter(Uppervoid plugin) {
         super(plugin, 68, new ItemStack(Material.BLAZE_ROD, 1), ChatColor.GOLD + "Bladespinner", 1, (long) (1.5 * 20), true);
     }
 }

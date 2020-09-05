@@ -24,13 +24,11 @@ import org.bukkit.plugin.java.JavaPlugin;
  * You should have received a copy of the GNU General Public License
  * along with Uppervoid.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class Uppervoid extends JavaPlugin
-{
+public class Uppervoid extends JavaPlugin {
     private Arena arena;
 
     @Override
-    public void onEnable()
-    {
+    public void onEnable() {
         this.arena = new Arena(this);
 
         Bukkit.getPluginManager().registerEvents(new PlayerListener(this, this.arena), this);
@@ -42,8 +40,7 @@ public class Uppervoid extends JavaPlugin
         SamaGamesAPI.get().getGameManager().setKeepPlayerCache(true);
     }
 
-    public Arena getArena()
-    {
+    public Arena getArena() {
         return this.arena;
     }
 }

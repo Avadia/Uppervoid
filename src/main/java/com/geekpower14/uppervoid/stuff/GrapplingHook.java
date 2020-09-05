@@ -2,14 +2,14 @@ package com.geekpower14.uppervoid.stuff;
 
 import com.geekpower14.uppervoid.Uppervoid;
 import com.geekpower14.uppervoid.arena.ArenaPlayer;
-import net.minecraft.server.v1_9_R2.EntityFishingHook;
-import net.minecraft.server.v1_9_R2.EntityHuman;
-import net.minecraft.server.v1_9_R2.World;
+import net.minecraft.server.v1_12_R1.EntityFishingHook;
+import net.minecraft.server.v1_12_R1.EntityHuman;
+import net.minecraft.server.v1_12_R1.WorldServer;
 import net.samagames.tools.ParticleEffect;
 import org.bukkit.*;
 import org.bukkit.block.Block;
-import org.bukkit.craftbukkit.v1_9_R2.CraftWorld;
-import org.bukkit.craftbukkit.v1_9_R2.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_12_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -31,12 +31,10 @@ import org.bukkit.util.Vector;
  * You should have received a copy of the GNU General Public License
  * along with Uppervoid.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class GrapplingHook extends Stuff
-{
+public class GrapplingHook extends Stuff {
     private int origin;
 
-    public GrapplingHook(Uppervoid plugin, int id, int uses)
-    {
+    public GrapplingHook(Uppervoid plugin, int id, int uses) {
         super(plugin, id, new ItemStack(Material.FISHING_ROD, 1), "Grapin", "Vise vite la couche et clic une fois tombé pour remonter !", 2, 5L, true);
 
         setOrigin(uses);
@@ -44,8 +42,7 @@ public class GrapplingHook extends Stuff
     }
 
     @Override
-    public void use(ArenaPlayer arenaPlayer)
-    {
+    public void use(ArenaPlayer arenaPlayer) {
         Player player = arenaPlayer.getPlayerIfOnline();
 
         if (!this.canUse(false) || this.getUses() <= 0)
@@ -64,14 +61,12 @@ public class GrapplingHook extends Stuff
         int maxRange = 100 * 150 / 70;
         int loop = 0;
 
-        while (loop < maxRange)
-        {
+        while (loop < maxRange) {
             loop++;
             eyeLocation.add(progress);
             block = eyeLocation.getBlock();
 
-            if(!block.getType().equals(Material.AIR))
-            {
+            if (!block.getType().equals(Material.AIR)) {
                 if (block.getType().equals(Material.QUARTZ_BLOCK))
                     end = eyeLocation;
 
@@ -79,8 +74,7 @@ public class GrapplingHook extends Stuff
             }
         }
 
-        if(end == null)
-        {
+        if (end == null) {
             arenaPlayer.giveStuff();
             player.sendMessage(ChatColor.RED + "Vous n'arrivez pas à vous accrocher !");
             hook.remove();
@@ -103,23 +97,20 @@ public class GrapplingHook extends Stuff
         arenaPlayer.giveStuff();
     }
 
-    public Entity spawnFish(EntityHuman entityhuman)
-    {
-        World world = ((CraftWorld) Bukkit.getWorld("world")).getHandle();
-        net.minecraft.server.v1_9_R2.Entity hook = new EntityFishingHook(world, entityhuman);
+    public Entity spawnFish(EntityHuman entityhuman) {
+        WorldServer world = ((CraftWorld) Bukkit.getWorld("world")).getHandle();
+        net.minecraft.server.v1_12_R1.Entity hook = new EntityFishingHook(world, entityhuman);
         world.addEntity(hook);
 
         return hook.getBukkitEntity();
     }
 
-    public void setOrigin(int origin)
-    {
+    public void setOrigin(int origin) {
         this.origin = origin;
     }
 
     @Override
-    public ItemStack getItem(ItemStack base)
-    {
+    public ItemStack getItem(ItemStack base) {
         base.setDurability((short) (64 - ((64 * this.getUses()) / this.origin)));
         return base;
     }

@@ -31,20 +31,16 @@ import java.util.List;
  * You should have received a copy of the GNU General Public License
  * along with Uppervoid.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class BlindnessPowerup extends UppervoidPowerup
-{
-    public BlindnessPowerup(Uppervoid plugin, Arena arena)
-    {
+public class BlindnessPowerup extends UppervoidPowerup {
+    public BlindnessPowerup(Uppervoid plugin, Arena arena) {
         super(plugin, arena);
     }
 
     @Override
-    public void onPickup(Player player)
-    {
+    public void onPickup(Player player) {
         List<Squid> squids = new ArrayList<>();
 
-        for (ArenaPlayer gamePlayer : this.arena.getInGamePlayers().values())
-        {
+        for (ArenaPlayer gamePlayer : this.arena.getInGamePlayers().values()) {
             if (gamePlayer.getPlayerIfOnline() == null || gamePlayer.getUUID().equals(player.getUniqueId()))
                 continue;
 
@@ -72,26 +68,22 @@ public class BlindnessPowerup extends UppervoidPowerup
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return ChatColor.DARK_GRAY + "Ninja Poulpe";
     }
 
     @Override
-    public ItemStack getIcon()
-    {
+    public ItemStack getIcon() {
         return new ItemStack(Material.INK_SACK, 1);
     }
 
     @Override
-    public double getWeight()
-    {
+    public double getWeight() {
         return 15;
     }
 
     @Override
-    public boolean isSpecial()
-    {
+    public boolean isSpecial() {
         return false;
     }
 }

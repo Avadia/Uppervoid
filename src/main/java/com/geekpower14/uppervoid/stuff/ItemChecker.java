@@ -23,32 +23,26 @@ import java.util.List;
  * You should have received a copy of the GNU General Public License
  * along with Uppervoid.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class ItemChecker implements Runnable
-{
+public class ItemChecker implements Runnable {
     private final Uppervoid plugin;
     private final ArrayList<Stock> items;
 
-    public ItemChecker(Uppervoid plugin)
-    {
+    public ItemChecker(Uppervoid plugin) {
         this.plugin = plugin;
         this.items = new ArrayList<>();
     }
 
     @Override
-    public void run()
-    {
+    public void run() {
         List<Stock> toRemove = new ArrayList<>();
 
-        for (Stock stock : this.items)
-        {
-            if (stock == null || stock.getItem() == null || stock.getItem().isDead())
-            {
+        for (Stock stock : this.items) {
+            if (stock == null || stock.getItem() == null || stock.getItem().isDead()) {
                 toRemove.add(stock);
                 continue;
             }
 
-            if (stock.getItem().isOnGround())
-            {
+            if (stock.getItem().isOnGround()) {
                 this.plugin.getServer().getScheduler().scheduleSyncDelayedTask(this.plugin, () -> this.finish(stock));
             }
         }
@@ -56,13 +50,11 @@ public class ItemChecker implements Runnable
         toRemove.forEach(this.items::remove);
     }
 
-    public void addItem(Item item, Stuff stuff)
-    {
+    public void addItem(Item item, Stuff stuff) {
         this.items.add(new Stock(item, stuff));
     }
 
-    public void finish(Stock stock)
-    {
+    public void finish(Stock stock) {
         Arena arena = this.plugin.getArena();
         Item item = stock.getItem();
 
@@ -73,24 +65,20 @@ public class ItemChecker implements Runnable
         item.remove();
     }
 
-    public class Stock
-    {
+    public static class Stock {
         private final Item item;
         private final Stuff stuff;
 
-        public Stock(Item item, Stuff stuff)
-        {
+        public Stock(Item item, Stuff stuff) {
             this.item = item;
             this.stuff = stuff;
         }
 
-        public Item getItem()
-        {
+        public Item getItem() {
             return this.item;
         }
 
-        public Stuff getStuff()
-        {
+        public Stuff getStuff() {
             return this.stuff;
         }
     }

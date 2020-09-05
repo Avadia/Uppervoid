@@ -21,10 +21,8 @@ import org.bukkit.inventory.ItemStack;
  * You should have received a copy of the GNU General Public License
  * along with Uppervoid.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class ChaosgrabberShooter extends Shooter
-{
-    public ChaosgrabberShooter(Uppervoid plugin)
-    {
+public class ChaosgrabberShooter extends Shooter {
+    public ChaosgrabberShooter(Uppervoid plugin) {
         super(plugin, 67, new ItemStack(Material.BONE, 1), ChatColor.BLUE + "Chaosgrabber", 1, (long) (1.7 * 20), true);
     }
 }

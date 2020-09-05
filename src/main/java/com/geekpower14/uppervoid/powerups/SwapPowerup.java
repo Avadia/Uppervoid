@@ -32,20 +32,17 @@ import java.util.stream.Collectors;
  * You should have received a copy of the GNU General Public License
  * along with Uppervoid.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class SwapPowerup extends UppervoidPowerup
-{
+public class SwapPowerup extends UppervoidPowerup {
     private final Random random;
 
-    public SwapPowerup(Uppervoid plugin, Arena arena)
-    {
+    public SwapPowerup(Uppervoid plugin, Arena arena) {
         super(plugin, arena);
 
         this.random = new Random();
     }
 
     @Override
-    public void onPickup(Player player)
-    {
+    public void onPickup(Player player) {
         List<ArenaPlayer> players = this.arena.getInGamePlayers().values().stream().filter(arenaPlayer -> !arenaPlayer.getUUID().equals(player.getUniqueId())).collect(Collectors.toList());
         Player randomized = players.get(this.random.nextInt(players.size())).getPlayerIfOnline();
 
@@ -63,26 +60,22 @@ public class SwapPowerup extends UppervoidPowerup
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return ChatColor.DARK_AQUA + "Echange de position";
     }
 
     @Override
-    public ItemStack getIcon()
-    {
+    public ItemStack getIcon() {
         return new ItemStack(Material.EYE_OF_ENDER, 1);
     }
 
     @Override
-    public double getWeight()
-    {
+    public double getWeight() {
         return 15;
     }
 
     @Override
-    public boolean isSpecial()
-    {
+    public boolean isSpecial() {
         return false;
     }
 }

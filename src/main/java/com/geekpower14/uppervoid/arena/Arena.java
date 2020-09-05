@@ -44,8 +44,7 @@ import java.util.UUID;
  * You should have received a copy of the GNU General Public License
  * along with Uppervoid.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class Arena extends Game<ArenaPlayer>
-{
+public class Arena extends Game<ArenaPlayer> {
     private final Uppervoid plugin;
     private final List<Location> spawns;
     private final List<UUID> builders;
@@ -60,9 +59,8 @@ public class Arena extends Game<ArenaPlayer>
     private Player second;
     private Player third;
 
-    public Arena(Uppervoid plugin)
-    {
-        super("uppervoid", "Uppervoid", "Restez au dessus du vide", ArenaPlayer.class, new UUID[] {
+    public Arena(Uppervoid plugin) {
+        super("uppervoid", "Uppervoid", "Restez au dessus du vide", ArenaPlayer.class, new UUID[]{
                 UUID.fromString("ad345a5e-5ae3-45bf-aba4-94f4102f37c0"),
                 UUID.fromString("29b2b527-1b59-45df-b7b0-d5ab20d8731a")
         });
@@ -76,13 +74,13 @@ public class Arena extends Game<ArenaPlayer>
         JsonArray spawnDefault = new JsonArray();
         spawnDefault.add(new JsonPrimitive("world, 0, 0, 0, 0, 0"));
 
-        JsonArray spawnsJson = properties.getOption("spawns", spawnDefault).getAsJsonArray();
+        JsonArray spawnsJson = properties.getMapProperty("spawns", spawnDefault).getAsJsonArray();
 
-        for(int i = 0; i < spawnsJson.size(); i++)
+        for (int i = 0; i < spawnsJson.size(); i++)
             this.spawns.add(LocationUtils.str2loc(spawnsJson.get(i).getAsString()));
 
-        World.Environment dimension = World.Environment.valueOf(properties.getOption("dimension", new JsonPrimitive(World.Environment.NORMAL.toString())).getAsString());
-        this.lobby = LocationUtils.str2loc(properties.getOption("waiting-lobby", new JsonPrimitive("world, 0, 0, 0, 0, 0")).getAsString());
+        World.Environment dimension = World.Environment.valueOf(properties.getMapProperty("dimension", new JsonPrimitive(World.Environment.NORMAL.toString())).getAsString());
+        this.lobby = LocationUtils.str2loc(properties.getMapProperty("waiting-lobby", new JsonPrimitive("world, 0, 0, 0, 0, 0")).getAsString());
 
         this.blockManager = new BlockManager();
         this.blockManager.setActive(false);
@@ -104,17 +102,16 @@ public class Arena extends Game<ArenaPlayer>
         this.powerupManager.registerPowerup(new SlownessPowerup(plugin, this));
         this.powerupManager.registerPowerup(new RepairPowerup(plugin, this));
 
-        JsonArray powerupsSpawnsJson = properties.getOption("powerups-spawns", spawnDefault).getAsJsonArray();
+        JsonArray powerupsSpawnsJson = properties.getMapProperty("powerups-spawns", spawnDefault).getAsJsonArray();
 
-        for(int i = 0; i < powerupsSpawnsJson.size(); i++)
+        for (int i = 0; i < powerupsSpawnsJson.size(); i++)
             this.powerupManager.registerLocation(LocationUtils.str2loc(powerupsSpawnsJson.get(i).getAsString()));
 
         SamaGamesAPI.get().getSkyFactory().setDimension(this.plugin.getServer().getWorld("world"), dimension);
     }
 
     @Override
-    public void handleLogin(Player player)
-    {
+    public void handleLogin(Player player) {
         super.handleLogin(player);
 
         player.teleport(this.lobby);
@@ -124,16 +121,14 @@ public class Arena extends Game<ArenaPlayer>
     }
 
     @Override
-    public void handleLogout(Player player)
-    {
+    public void handleLogout(Player player) {
         ArenaPlayer arenaPlayer = this.getPlayer(player.getUniqueId());
         super.handleLogout(player);
 
-        if(this.getStatus() == Status.IN_GAME && arenaPlayer != null && !arenaPlayer.isSpectator())
-        {
-            if(this.getInGamePlayers().size() == 1)
+        if (this.getStatus() == Status.IN_GAME && arenaPlayer != null && !arenaPlayer.isSpectator()) {
+            if (this.getInGamePlayers().size() == 1)
                 this.plugin.getServer().getScheduler().scheduleSyncDelayedTask(this.plugin, this::win, 1L);
-            else if(this.getConnectedPlayers() <= 0)
+            else if (this.getConnectedPlayers() <= 0)
                 this.plugin.getServer().getScheduler().scheduleSyncDelayedTask(this.plugin, this::handleGameEnd, 1L);
             else
                 this.lose(player);
@@ -141,12 +136,10 @@ public class Arena extends Game<ArenaPlayer>
     }
 
     @Override
-    public void startGame()
-    {
+    public void startGame() {
         super.startGame();
 
-        for (ArenaPlayer arenaPlayer : this.gamePlayers.values())
-        {
+        for (ArenaPlayer arenaPlayer : this.gamePlayers.values()) {
             Player player = arenaPlayer.getPlayerIfOnline();
             player.getInventory().clear();
 
@@ -169,23 +162,20 @@ public class Arena extends Game<ArenaPlayer>
         this.antiAFK = this.plugin.getServer().getScheduler().runTaskTimer(this.plugin, () -> this.getInGamePlayers().values().forEach(ArenaPlayer::checkAntiAFK), time * 20L, 20L);
         this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> this.blockManager.setActive(true), time * 20L);
 
-        this.gameTime = this.plugin.getServer().getScheduler().runTaskTimerAsynchronously(this.plugin, new Runnable()
-        {
+        this.gameTime = this.plugin.getServer().getScheduler().runTaskTimerAsynchronously(this.plugin, new Runnable() {
             private int time = 0;
 
             @Override
-            public void run()
-            {
+            public void run() {
                 this.time++;
                 updateScoreboards(this.formatTime(this.time));
             }
 
-            public String formatTime(int time)
-            {
+            public String formatTime(int time) {
                 int mins = time / 60;
                 int secs = time - mins * 60;
 
-                String secsSTR = (secs < 10) ? "0" + Integer.toString(secs) : Integer.toString(secs);
+                String secsSTR = (secs < 10) ? "0" + secs : Integer.toString(secs);
 
                 return mins + ":" + secsSTR;
             }
@@ -193,8 +183,7 @@ public class Arena extends Game<ArenaPlayer>
     }
 
     @Override
-    public void handleGameEnd()
-    {
+    public void handleGameEnd() {
         this.blockManager.setActive(false);
         this.gameTime.cancel();
         this.antiAFK.cancel();
@@ -202,8 +191,7 @@ public class Arena extends Game<ArenaPlayer>
         super.handleGameEnd();
     }
 
-    public void win()
-    {
+    public void win() {
         this.setStatus(Status.FINISHED);
 
         this.blockManager.setActive(false);
@@ -211,8 +199,7 @@ public class Arena extends Game<ArenaPlayer>
 
         Player player = this.getWinner();
 
-        if (player == null)
-        {
+        if (player == null) {
             this.handleGameEnd();
             return;
         }
@@ -220,11 +207,10 @@ public class Arena extends Game<ArenaPlayer>
         this.handleWinner(player.getUniqueId());
         this.effectsOnWinner(player);
 
-        try
-        {
+        try {
             this.coherenceMachine.getTemplateManager().getPlayerLeaderboardWinTemplate().execute(player, this.second, this.third);
+        } catch (Exception ignored) {
         }
-        catch (Exception ignored) {}
 
         this.addCoins(player, 30, "Victoire !");
 
@@ -233,8 +219,7 @@ public class Arena extends Game<ArenaPlayer>
         this.handleGameEnd();
     }
 
-    public void lose(Player player)
-    {
+    public void lose(Player player) {
         this.setSpectator(player);
         this.teleportRandomSpawn(player);
 
@@ -244,94 +229,77 @@ public class Arena extends Game<ArenaPlayer>
         player.getInventory().setItem(8, this.coherenceMachine.getLeaveItem());
         player.getInventory().setHeldItemSlot(0);
 
-        if (this.getStatus().equals(Status.IN_GAME))
-        {
+        if (this.getStatus().equals(Status.IN_GAME)) {
             int left = this.getInGamePlayers().size();
             this.coherenceMachine.getMessageManager().writeCustomMessage(PlayerUtils.getColoredFormattedPlayerName(player) + ChatColor.YELLOW + " a perdu ! (" + left + " joueur" + ((left > 1) ? "s" : "") + " restant" + ((left > 1) ? "s" : "") + ")", true);
         }
 
         this.plugin.getServer().getScheduler().runTaskAsynchronously(this.plugin, () ->
         {
-            for(ArenaPlayer arenaPlayer : this.getInGamePlayers().values())
-            {
-                if(arenaPlayer.getUUID().equals(player.getUniqueId()))
+            for (ArenaPlayer arenaPlayer : this.getInGamePlayers().values()) {
+                if (arenaPlayer.getUUID().equals(player.getUniqueId()))
                     continue;
 
                 this.addCoins(arenaPlayer.getPlayerIfOnline(), 3, "Mort de " + PlayerUtils.getColoredFormattedPlayerName(player));
             }
         });
 
-        if (this.getInGamePlayers().size() == 1 && getStatus().equals(Status.IN_GAME))
-        {
+        if (this.getInGamePlayers().size() == 1 && getStatus().equals(Status.IN_GAME)) {
             this.second = player;
             this.win();
-        }
-        else if (this.getInGamePlayers().size() == 2 && getStatus().equals(Status.IN_GAME))
-        {
+        } else if (this.getInGamePlayers().size() == 2 && getStatus().equals(Status.IN_GAME)) {
             this.third = player;
         }
 
         this.updateScoreboards();
     }
 
-    public void updateScoreboards()
-    {
+    public void updateScoreboards() {
         this.gamePlayers.values().forEach(ArenaPlayer::updateScoreboard);
     }
 
-    public void updateScoreboards(String time)
-    {
+    public void updateScoreboards(String time) {
         for (ArenaPlayer arena : this.gamePlayers.values())
             arena.setScoreboardTime(time);
     }
 
-    public void addBuilder(Player player)
-    {
+    public void addBuilder(Player player) {
         this.builders.add(player.getUniqueId());
     }
 
-    public void removeBuilder(Player player)
-    {
+    public void removeBuilder(Player player) {
         this.builders.remove(player.getUniqueId());
     }
 
-    public void teleportRandomSpawn(Player p)
-    {
+    public void teleportRandomSpawn(Player p) {
         p.teleport(this.spawns.get(new Random().nextInt(this.spawns.size())));
     }
 
-    public Player getWinner()
-    {
+    public Player getWinner() {
         return this.getInGamePlayers().values().iterator().next().getPlayerIfOnline();
     }
 
-    public Uppervoid getPlugin()
-    {
+    public Uppervoid getPlugin() {
         return this.plugin;
     }
 
-    public BlockManager getBlockManager()
-    {
+    public BlockManager getBlockManager() {
         return this.blockManager;
     }
 
-    public ItemManager getItemManager()
-    {
+    public ItemManager getItemManager() {
         return this.itemManager;
     }
 
-    public ItemChecker getItemChecker()
-    {
+    public ItemChecker getItemChecker() {
         return this.itemChecker;
     }
 
-    public Location getLobby()
-    {
+    public Location getLobby() {
         return this.lobby;
     }
 
-    public boolean isBuilder(UUID uuid)
-    {
+    public boolean isBuilder(UUID uuid) {
         return this.builders.contains(uuid);
     }
 }

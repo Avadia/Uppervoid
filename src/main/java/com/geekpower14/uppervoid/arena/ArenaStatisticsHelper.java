@@ -21,38 +21,31 @@ import java.util.UUID;
  * You should have received a copy of the GNU General Public License
  * along with Uppervoid.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class ArenaStatisticsHelper implements IGameStatisticsHelper
-{
+public class ArenaStatisticsHelper implements IGameStatisticsHelper {
     @Override
-    public void increasePlayedTime(UUID uuid, long playedTime)
-    {
+    public void increasePlayedTime(UUID uuid, long playedTime) {
         SamaGamesAPI.get().getStatsManager().getPlayerStats(uuid).getUppervoidStatistics().incrByPlayedTime(playedTime);
     }
 
     @Override
-    public void increasePlayedGames(UUID uuid)
-    {
+    public void increasePlayedGames(UUID uuid) {
         SamaGamesAPI.get().getStatsManager().getPlayerStats(uuid).getUppervoidStatistics().incrByPlayedGames(1);
     }
 
     @Override
-    public void increaseWins(UUID uuid)
-    {
+    public void increaseWins(UUID uuid) {
         SamaGamesAPI.get().getStatsManager().getPlayerStats(uuid).getUppervoidStatistics().incrByWins(1);
     }
 
-    public void increaseBlocks(UUID uuid)
-    {
+    public void increaseBlocks(UUID uuid) {
         SamaGamesAPI.get().getStatsManager().getPlayerStats(uuid).getUppervoidStatistics().incrByBlocks(1);
     }
 
-    public void increaseGrenades(UUID uuid)
-    {
+    public void increaseGrenades(UUID uuid) {
         SamaGamesAPI.get().getStatsManager().getPlayerStats(uuid).getUppervoidStatistics().incrByGrenades(1);
     }
 
-    public void increaseTntLaunched(UUID uuid)
-    {
+    public void increaseTntLaunched(UUID uuid) {
         SamaGamesAPI.get().getStatsManager().getPlayerStats(uuid).getUppervoidStatistics().incrByTntLaunched(1);
     }
 }

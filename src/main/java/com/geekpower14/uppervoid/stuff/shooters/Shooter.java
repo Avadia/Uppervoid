@@ -1,15 +1,18 @@
 package com.geekpower14.uppervoid.stuff.shooters;
 
-import com.geekpower14.uppervoid.arena.ArenaStatisticsHelper;
-import com.geekpower14.uppervoid.stuff.Stuff;
 import com.geekpower14.uppervoid.Uppervoid;
 import com.geekpower14.uppervoid.arena.Arena;
 import com.geekpower14.uppervoid.arena.ArenaPlayer;
+import com.geekpower14.uppervoid.arena.ArenaStatisticsHelper;
+import com.geekpower14.uppervoid.stuff.Stuff;
 import com.geekpower14.uppervoid.utils.TNTExplosion;
 import net.samagames.api.SamaGamesAPI;
-import org.bukkit.*;
+import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.craftbukkit.v1_9_R2.CraftWorld;
+import org.bukkit.craftbukkit.v1_12_R1.CraftWorld;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -36,16 +39,13 @@ import java.util.UUID;
  * You should have received a copy of the GNU General Public License
  * along with Uppervoid.  If not, see <http://www.gnu.org/licenses/>.
  */
-class Shooter extends Stuff
-{
-    Shooter(Uppervoid plugin, int id, ItemStack stack, String display, int amount, long reloadTime, boolean glow)
-    {
+class Shooter extends Stuff {
+    Shooter(Uppervoid plugin, int id, ItemStack stack, String display, int amount, long reloadTime, boolean glow) {
         super(plugin, id, stack, display, "Votre magnificate canon à TNT", amount, reloadTime, glow);
     }
 
     @Override
-    public void use(ArenaPlayer arenaPlayer)
-    {
+    public void use(ArenaPlayer arenaPlayer) {
         Player player = arenaPlayer.getPlayerIfOnline();
 
         if (!this.canUse(true) || !this.plugin.getArena().getBlockManager().isActive())
@@ -64,8 +64,7 @@ class Shooter extends Stuff
     }
 
     @Override
-    public void onItemTouchGround(Arena arena, Item item)
-    {
+    public void onItemTouchGround(Arena arena, Item item) {
         Location center = item.getLocation();
         UUID launcher = UUID.fromString(item.getMetadata("uv-owner").get(0).asString());
         Block real = center.add(0, -0.5, 0).getBlock();
@@ -75,7 +74,7 @@ class Shooter extends Stuff
         List<Block> levelTwo = new ArrayList<>();
         List<Block> levelThree = new ArrayList<>();
 
-        String[] schema = new String[] {
+        String[] schema = new String[]{
                 "01110",
                 "12221",
                 "12321",
@@ -92,12 +91,10 @@ class Shooter extends Stuff
         int incrX;
         int incrZ = 0;
 
-        for (String str : schema)
-        {
+        for (String str : schema) {
             incrX = 0;
 
-            for (int i = 0; i < str.length(); i++)
-            {
+            for (int i = 0; i < str.length(); i++) {
                 char c = str.charAt(i);
 
                 if (c == '1')
@@ -128,13 +125,12 @@ class Shooter extends Stuff
     }
 
     @Override
-    public ItemStack getItem(ItemStack base)
-    {
+    public ItemStack getItem(ItemStack base) {
         ItemMeta meta = base.getItemMeta();
 
         List<String> lores = meta.getLore();
         lores.add("");
-        lores.add(ChatColor.GRAY + "Se recharge en " + ChatColor.GOLD + this.reloadTime / 20L + ChatColor.GRAY  + " secondes .");
+        lores.add(ChatColor.GRAY + "Se recharge en " + ChatColor.GOLD + this.reloadTime / 20L + ChatColor.GRAY + " secondes .");
 
         meta.setLore(lores);
         base.setItemMeta(meta);

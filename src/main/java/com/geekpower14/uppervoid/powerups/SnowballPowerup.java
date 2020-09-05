@@ -26,31 +26,24 @@ import org.bukkit.scheduler.BukkitRunnable;
  * You should have received a copy of the GNU General Public License
  * along with Uppervoid.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class SnowballPowerup extends UppervoidPowerup
-{
-    public SnowballPowerup(Uppervoid plugin, Arena arena)
-    {
+public class SnowballPowerup extends UppervoidPowerup {
+    public SnowballPowerup(Uppervoid plugin, Arena arena) {
         super(plugin, arena);
     }
 
     @Override
-    public void onPickup(Player player)
-    {
-        new BukkitRunnable()
-        {
+    public void onPickup(Player player) {
+        new BukkitRunnable() {
             private int ticks = 0;
 
             @Override
-            public void run()
-            {
+            public void run() {
                 Snowball snowball = player.launchProjectile(Snowball.class);
                 snowball.setVelocity(snowball.getVelocity().multiply(1.75));
 
-                new BukkitRunnable()
-                {
+                new BukkitRunnable() {
                     @Override
-                    public void run()
-                    {
+                    public void run() {
                         if (!snowball.isDead())
                             ParticleEffect.FLAME.display(0.05F, 0.05F, 0.05F, 0.1F, 4, snowball.getLocation(), 120.0D);
                         else
@@ -67,26 +60,22 @@ public class SnowballPowerup extends UppervoidPowerup
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return ChatColor.WHITE + "Canon à boule de neige : 6 secondes";
     }
 
     @Override
-    public ItemStack getIcon()
-    {
+    public ItemStack getIcon() {
         return new ItemStack(Material.SNOW_BALL, 1);
     }
 
     @Override
-    public double getWeight()
-    {
+    public double getWeight() {
         return 10;
     }
 
     @Override
-    public boolean isSpecial()
-    {
+    public boolean isSpecial() {
         return false;
     }
 }

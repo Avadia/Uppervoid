@@ -20,10 +20,8 @@ import org.bukkit.inventory.ItemStack;
  * You should have received a copy of the GNU General Public License
  * along with Uppervoid.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class LowShooter extends Shooter
-{
-    public LowShooter(Uppervoid plugin)
-    {
+public class LowShooter extends Shooter {
+    public LowShooter(Uppervoid plugin) {
         super(plugin, 66, new ItemStack(Material.STICK, 1), "Shooter", 1, 20L * 2, false);
     }
 }

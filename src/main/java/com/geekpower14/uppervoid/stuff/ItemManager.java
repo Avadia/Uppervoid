@@ -1,10 +1,10 @@
 package com.geekpower14.uppervoid.stuff;
 
+import com.geekpower14.uppervoid.Uppervoid;
 import com.geekpower14.uppervoid.stuff.grenada.Grenada;
 import com.geekpower14.uppervoid.stuff.shooters.BladespinnerShooter;
 import com.geekpower14.uppervoid.stuff.shooters.ChaosgrabberShooter;
 import com.geekpower14.uppervoid.stuff.shooters.LowShooter;
-import com.geekpower14.uppervoid.Uppervoid;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,13 +25,11 @@ import java.util.List;
  * You should have received a copy of the GNU General Public License
  * along with Uppervoid.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class ItemManager
-{
+public class ItemManager {
     public final Uppervoid plugin;
     public final List<Stuff> stuffs;
 
-    public ItemManager(Uppervoid plugin)
-    {
+    public ItemManager(Uppervoid plugin) {
         this.plugin = plugin;
         this.stuffs = new ArrayList<>();
 
@@ -55,10 +53,9 @@ public class ItemManager
         this.stuffs.add(new GrapplingHook(plugin, 79, 5));
     }
 
-    public Stuff getItemByID(int id)
-    {
-        for(Stuff stuff : this.stuffs)
-            if(stuff.getId() == id)
+    public Stuff getItemByID(int id) {
+        for (Stuff stuff : this.stuffs)
+            if (stuff.getId() == id)
                 return stuff.clone();
 
         this.plugin.getLogger().severe("Stuff not found: " + id);

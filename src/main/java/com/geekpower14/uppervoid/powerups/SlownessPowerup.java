@@ -27,18 +27,14 @@ import org.bukkit.potion.PotionType;
  * You should have received a copy of the GNU General Public License
  * along with Uppervoid.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class SlownessPowerup extends UppervoidPowerup
-{
-    public SlownessPowerup(Uppervoid plugin, Arena arena)
-    {
+public class SlownessPowerup extends UppervoidPowerup {
+    public SlownessPowerup(Uppervoid plugin, Arena arena) {
         super(plugin, arena);
     }
 
     @Override
-    public void onPickup(Player player)
-    {
-        for (ArenaPlayer gamePlayer : this.arena.getInGamePlayers().values())
-        {
+    public void onPickup(Player player) {
+        for (ArenaPlayer gamePlayer : this.arena.getInGamePlayers().values()) {
             if (gamePlayer.getPlayerIfOnline() == null || gamePlayer.getUUID().equals(player.getUniqueId()))
                 continue;
 
@@ -47,26 +43,22 @@ public class SlownessPowerup extends UppervoidPowerup
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return ChatColor.GRAY + "Lenteur : 6 secondes";
     }
 
     @Override
-    public ItemStack getIcon()
-    {
+    public ItemStack getIcon() {
         return new Potion(PotionType.SLOWNESS).toItemStack(1);
     }
 
     @Override
-    public double getWeight()
-    {
+    public double getWeight() {
         return 10;
     }
 
     @Override
-    public boolean isSpecial()
-    {
+    public boolean isSpecial() {
         return false;
     }
 }

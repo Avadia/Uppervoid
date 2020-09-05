@@ -20,13 +20,11 @@ import net.samagames.tools.powerups.Powerup;
  * You should have received a copy of the GNU General Public License
  * along with Uppervoid.  If not, see <http://www.gnu.org/licenses/>.
  */
-public abstract class UppervoidPowerup implements Powerup
-{
+public abstract class UppervoidPowerup implements Powerup {
     protected final Uppervoid plugin;
     protected final Arena arena;
 
-    public UppervoidPowerup(Uppervoid plugin, Arena arena)
-    {
+    public UppervoidPowerup(Uppervoid plugin, Arena arena) {
         this.plugin = plugin;
         this.arena = arena;
     }

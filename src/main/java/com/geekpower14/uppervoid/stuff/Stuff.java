@@ -27,8 +27,7 @@ import java.util.Collections;
  * You should have received a copy of the GNU General Public License
  * along with Uppervoid.  If not, see <http://www.gnu.org/licenses/>.
  */
-public abstract class Stuff implements Cloneable
-{
+public abstract class Stuff implements Cloneable {
     protected final Uppervoid plugin;
     protected final int id;
     protected final ItemStack stack;
@@ -41,8 +40,7 @@ public abstract class Stuff implements Cloneable
     protected int uses;
     protected boolean reloading = false;
 
-    public Stuff(Uppervoid plugin, int id, ItemStack stack, String display, String lore, int uses, long reloadTime, boolean glow)
-    {
+    public Stuff(Uppervoid plugin, int id, ItemStack stack, String display, String lore, int uses, long reloadTime, boolean glow) {
         this.plugin = plugin;
         this.id = id;
         this.stack = stack;
@@ -54,32 +52,25 @@ public abstract class Stuff implements Cloneable
     }
 
     public abstract void use(ArenaPlayer arenaPlayer);
+
     public abstract ItemStack getItem(ItemStack base);
 
-    public void onItemTouchGround(Arena arena, Item item) {}
+    public void onItemTouchGround(Arena arena, Item item) {
+    }
 
-    public void setOwner(ArenaPlayer arenaPlayer)
-    {
+    public void setOwner(ArenaPlayer arenaPlayer) {
         this.arenaPlayer = arenaPlayer;
     }
 
-    public void setUses(int uses)
-    {
-        this.uses = uses;
-    }
-
-    public void setReloading()
-    {
+    public void setReloading() {
         this.plugin.getServer().getScheduler().runTaskAsynchronously(this.plugin, new ReloadingTask(this.plugin, this.arenaPlayer, this));
     }
 
-    public void setReloading(boolean reloading)
-    {
+    public void setReloading(boolean reloading) {
         this.reloading = reloading;
     }
 
-    public ItemStack getItem()
-    {
+    public ItemStack getItem() {
         ItemStack modifiedStack = this.stack.clone();
         modifiedStack.setAmount(this.uses);
 
@@ -96,23 +87,23 @@ public abstract class Stuff implements Cloneable
         return this.getItem(modifiedStack);
     }
 
-    public int getId()
-    {
+    public int getId() {
         return this.id;
     }
 
-    public int getUses()
-    {
+    public int getUses() {
         return this.uses;
     }
 
-    public long getReloadTime()
-    {
+    public void setUses(int uses) {
+        this.uses = uses;
+    }
+
+    public long getReloadTime() {
         return this.reloadTime;
     }
 
-    public boolean canUse(boolean playerDependant)
-    {
+    public boolean canUse(boolean playerDependant) {
         if (playerDependant)
             return this.arenaPlayer != null && !(this.arenaPlayer.isSpectator() || this.arenaPlayer.isReloading() || this.reloading);
         else
@@ -120,8 +111,7 @@ public abstract class Stuff implements Cloneable
     }
 
     @SuppressWarnings("deprecation")
-    public boolean isActiveItem()
-    {
+    public boolean isActiveItem() {
         if (this.arenaPlayer == null)
             return false;
 
@@ -129,8 +119,7 @@ public abstract class Stuff implements Cloneable
         return itemStack != null && itemStack.isSimilar(this.arenaPlayer.getPlayerIfOnline().getItemInHand());
     }
 
-    public Stuff clone()
-    {
+    public Stuff clone() {
         try {
             return (Stuff) super.clone();
         } catch (CloneNotSupportedException e) {

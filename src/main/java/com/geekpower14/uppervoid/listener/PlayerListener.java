@@ -2,8 +2,8 @@ package com.geekpower14.uppervoid.listener;
 
 import com.geekpower14.uppervoid.Uppervoid;
 import com.geekpower14.uppervoid.arena.Arena;
-import com.geekpower14.uppervoid.stuff.Stuff;
 import com.geekpower14.uppervoid.arena.ArenaPlayer;
+import com.geekpower14.uppervoid.stuff.Stuff;
 import net.samagames.api.SamaGamesAPI;
 import net.samagames.api.games.Status;
 import org.bukkit.Material;
@@ -36,27 +36,23 @@ import org.bukkit.event.weather.WeatherChangeEvent;
  * You should have received a copy of the GNU General Public License
  * along with Uppervoid.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class PlayerListener implements Listener
-{
+public class PlayerListener implements Listener {
     private final Uppervoid plugin;
     private final Arena arena;
 
-    public PlayerListener(Uppervoid plugin, Arena arena)
-    {
+    public PlayerListener(Uppervoid plugin, Arena arena) {
         this.plugin = plugin;
         this.arena = arena;
     }
 
     @EventHandler
-    public void onPlayerInteract(PlayerInteractEvent event)
-    {
+    public void onPlayerInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
         ArenaPlayer arenaPlayer = this.arena.getPlayer(player.getUniqueId());
 
         event.setCancelled(true);
 
-        if (event.getItem() != null && event.getItem().getType() == SamaGamesAPI.get().getGameManager().getCoherenceMachine().getLeaveItem().getType())
-        {
+        if (event.getItem() != null && event.getItem().getType() == SamaGamesAPI.get().getGameManager().getCoherenceMachine().getLeaveItem().getType()) {
             SamaGamesAPI.get().getGameManager().kickPlayer(event.getPlayer(), "");
             return;
         }
@@ -73,24 +69,20 @@ public class PlayerListener implements Listener
     }
 
     @EventHandler
-    public void onEntityDamage(EntityDamageEvent event)
-    {
+    public void onEntityDamage(EntityDamageEvent event) {
         event.setCancelled(true);
 
-        if (event.getEntity() instanceof Player && event.getCause() == EntityDamageEvent.DamageCause.VOID)
-        {
+        if (event.getEntity() instanceof Player && event.getCause() == EntityDamageEvent.DamageCause.VOID) {
             Player player = (Player) event.getEntity();
 
-            if (!this.arena.getStatus().equals(Status.IN_GAME) && !this.arena.getStatus().equals(Status.FINISHED))
-            {
+            if (!this.arena.getStatus().equals(Status.IN_GAME) && !this.arena.getStatus().equals(Status.FINISHED)) {
                 player.teleport(this.arena.getLobby());
                 return;
             }
 
             ArenaPlayer arenaPlayer = this.arena.getPlayer(player.getUniqueId());
 
-            if (arenaPlayer == null || arenaPlayer.isSpectator() || this.arena.getStatus().equals(Status.FINISHED))
-            {
+            if (arenaPlayer == null || arenaPlayer.isSpectator() || this.arena.getStatus().equals(Status.FINISHED)) {
                 this.arena.teleportRandomSpawn(player);
                 return;
             }
@@ -101,22 +93,19 @@ public class PlayerListener implements Listener
     }
 
     @EventHandler
-    public void onEntityDamageByEntity(EntityDamageByEntityEvent event)
-    {
+    public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
         event.setCancelled(true);
 
-        if (event.getEntity() instanceof Player && event.getDamager() instanceof Snowball)
-        {
+        if (event.getEntity() instanceof Player && event.getDamager() instanceof Snowball) {
             event.getEntity().setVelocity(event.getDamager().getVelocity());
         }
     }
 
     @EventHandler
-    public void onPlayerMove(PlayerMoveEvent event)
-    {
+    public void onPlayerMove(PlayerMoveEvent event) {
         Player player = event.getPlayer();
 
-        if(event.getFrom().getBlock().equals(event.getTo().getBlock()))
+        if (event.getFrom().getBlock().equals(event.getTo().getBlock()))
             return;
 
         ArenaPlayer arenaPlayer = this.arena.getPlayer(player.getUniqueId());
@@ -130,15 +119,13 @@ public class PlayerListener implements Listener
         if (player.getLocation().getBlock().getRelative(BlockFace.DOWN).getType() == Material.AIR)
             return;
 
-        if (!arenaPlayer.isOnSameBlock())
-        {
+        if (!arenaPlayer.isOnSameBlock()) {
             Block block = player.getLocation().getBlock().getRelative(BlockFace.DOWN);
 
             this.plugin.getServer().getScheduler().scheduleSyncDelayedTask(this.plugin, () ->
             {
-                if (this.arena.isBuilder(player.getUniqueId()))
-                {
-                    String[] schema = new String[] {
+                if (this.arena.isBuilder(player.getUniqueId())) {
+                    String[] schema = new String[]{
                             "00100",
                             "01210",
                             "12321",
@@ -155,12 +142,10 @@ public class PlayerListener implements Listener
                     int incrX;
                     int incrZ = 0;
 
-                    for (String str : schema)
-                    {
+                    for (String str : schema) {
                         incrX = 0;
 
-                        for (int i = 0; i < str.length(); i++)
-                        {
+                        for (int i = 0; i < str.length(); i++) {
                             char c = str.charAt(i);
 
                             if (c == '1')
@@ -177,9 +162,7 @@ public class PlayerListener implements Listener
                     }
 
                     arenaPlayer.updateLastChangeBlock();
-                }
-                else
-                {
+                } else {
                     if (this.arena.getBlockManager().damage(player.getUniqueId(), block))
                         arenaPlayer.updateLastChangeBlock();
                 }
@@ -188,44 +171,37 @@ public class PlayerListener implements Listener
     }
 
     @EventHandler
-    public void onPlayerFish(PlayerFishEvent event)
-    {
+    public void onPlayerFish(PlayerFishEvent event) {
         event.setCancelled(true);
     }
 
     @EventHandler
-    public void onInventoryClick(InventoryClickEvent event)
-    {
+    public void onInventoryClick(InventoryClickEvent event) {
         event.setCancelled(true);
     }
 
     @EventHandler
-    public void onPlayerDropItem(PlayerDropItemEvent event)
-    {
+    public void onPlayerDropItem(PlayerDropItemEvent event) {
         event.setCancelled(true);
     }
 
     @EventHandler
-    public void onPlayerPickupItem(PlayerPickupItemEvent event)
-    {
+    public void onPlayerPickupItem(PlayerPickupItemEvent event) {
         event.setCancelled(true);
     }
 
     @EventHandler
-    public void onFoodLevelChange(FoodLevelChangeEvent event)
-    {
+    public void onFoodLevelChange(FoodLevelChangeEvent event) {
         event.setCancelled(true);
     }
 
     @EventHandler
-    public void onWeatherChange(WeatherChangeEvent event)
-    {
+    public void onWeatherChange(WeatherChangeEvent event) {
         event.setCancelled(true);
     }
 
     @EventHandler
-    public void onPlayerSwapHandItems(PlayerSwapHandItemsEvent event)
-    {
+    public void onPlayerSwapHandItems(PlayerSwapHandItemsEvent event) {
         event.setCancelled(true);
     }
 }

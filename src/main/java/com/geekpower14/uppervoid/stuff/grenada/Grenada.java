@@ -32,18 +32,15 @@ import java.util.UUID;
  * You should have received a copy of the GNU General Public License
  * along with Uppervoid.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class Grenada extends Stuff
-{
-    public Grenada(Uppervoid plugin, int id, int uses)
-    {
+public class Grenada extends Stuff {
+    public Grenada(Uppervoid plugin, int id, int uses) {
         super(plugin, id, new ItemStack(Material.CLAY_BALL, 1), ChatColor.RED + "Grenada", "Greeenaaadaa!", 2, 10L, false);
         this.uses = uses;
     }
 
     @SuppressWarnings("deprecation")
     @Override
-    public void use(ArenaPlayer arenaPlayer)
-    {
+    public void use(ArenaPlayer arenaPlayer) {
         Player player = arenaPlayer.getPlayerIfOnline();
         ItemStack stack = player.getInventory().getItemInHand();
 
@@ -71,8 +68,7 @@ public class Grenada extends Stuff
     }
 
     @Override
-    public void onItemTouchGround(Arena arena, Item item)
-    {
+    public void onItemTouchGround(Arena arena, Item item) {
         Location center = item.getLocation();
         UUID launcher = UUID.fromString(item.getMetadata("uv-owner").get(0).asString());
         Block real = center.add(0, -0.5, 0).getBlock();
@@ -82,7 +78,7 @@ public class Grenada extends Stuff
         ArrayList<Block> levelTwo = new ArrayList<>();
         ArrayList<Block> levelThree = new ArrayList<>();
 
-        String[] schema = new String[] {
+        String[] schema = new String[]{
                 "00011111000",
                 "00111111100",
                 "01112221110",
@@ -105,12 +101,10 @@ public class Grenada extends Stuff
         int incrX;
         int incrZ = 0;
 
-        for (String str : schema)
-        {
+        for (String str : schema) {
             incrX = 0;
 
-            for (int i = 0; i < str.length(); i++)
-            {
+            for (int i = 0; i < str.length(); i++) {
                 char c = str.charAt(i);
 
                 if (c == '1')
@@ -139,8 +133,7 @@ public class Grenada extends Stuff
     }
 
     @Override
-    public ItemStack getItem(ItemStack base)
-    {
+    public ItemStack getItem(ItemStack base) {
         return base;
     }
 }

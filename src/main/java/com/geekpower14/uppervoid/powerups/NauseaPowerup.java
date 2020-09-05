@@ -26,18 +26,14 @@ import org.bukkit.potion.PotionEffectType;
  * You should have received a copy of the GNU General Public License
  * along with Uppervoid.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class NauseaPowerup extends UppervoidPowerup
-{
-    public NauseaPowerup(Uppervoid plugin, Arena arena)
-    {
+public class NauseaPowerup extends UppervoidPowerup {
+    public NauseaPowerup(Uppervoid plugin, Arena arena) {
         super(plugin, arena);
     }
 
     @Override
-    public void onPickup(Player player)
-    {
-        for (ArenaPlayer gamePlayer : this.arena.getInGamePlayers().values())
-        {
+    public void onPickup(Player player) {
+        for (ArenaPlayer gamePlayer : this.arena.getInGamePlayers().values()) {
             if (gamePlayer.getPlayerIfOnline() == null || gamePlayer.getUUID().equals(player.getUniqueId()))
                 continue;
 
@@ -46,26 +42,22 @@ public class NauseaPowerup extends UppervoidPowerup
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return ChatColor.DARK_GREEN + "Nausée";
     }
 
     @Override
-    public ItemStack getIcon()
-    {
+    public ItemStack getIcon() {
         return new ItemStack(Material.ROTTEN_FLESH, 1);
     }
 
     @Override
-    public double getWeight()
-    {
+    public double getWeight() {
         return 10;
     }
 
     @Override
-    public boolean isSpecial()
-    {
+    public boolean isSpecial() {
         return false;
     }
 }

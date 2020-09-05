@@ -25,40 +25,33 @@ import org.bukkit.potion.PotionEffectType;
  * You should have received a copy of the GNU General Public License
  * along with Uppervoid.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class InvisibilityPowerup extends UppervoidPowerup
-{
-    public InvisibilityPowerup(Uppervoid plugin, Arena arena)
-    {
+public class InvisibilityPowerup extends UppervoidPowerup {
+    public InvisibilityPowerup(Uppervoid plugin, Arena arena) {
         super(plugin, arena);
     }
 
     @Override
-    public void onPickup(Player player)
-    {
+    public void onPickup(Player player) {
         player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 20 * 8, 0));
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return ChatColor.WHITE + "Invisibilité : 8 secondes";
     }
 
     @Override
-    public ItemStack getIcon()
-    {
+    public ItemStack getIcon() {
         return new ItemStack(Material.QUARTZ_BLOCK, 1);
     }
 
     @Override
-    public double getWeight()
-    {
+    public double getWeight() {
         return 15;
     }
 
     @Override
-    public boolean isSpecial()
-    {
+    public boolean isSpecial() {
         return false;
     }
 }

@@ -28,24 +28,20 @@ import java.util.UUID;
  * You should have received a copy of the GNU General Public License
  * along with Uppervoid.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class BlockManager
-{
+public class BlockManager {
     private final List<BlockGroup> groups;
     private boolean active = true;
 
-    public BlockManager()
-    {
+    public BlockManager() {
         this.groups = new ArrayList<>();
         this.loadGroups();
     }
 
-    public boolean damage(UUID damager, Block block)
-    {
+    public boolean damage(UUID damager, Block block) {
         return this.damage(damager, block, 1);
     }
 
-    public boolean damage(UUID damager, Block block, int damage)
-    {
+    public boolean damage(UUID damager, Block block, int damage) {
         if (!this.active)
             return false;
 
@@ -57,8 +53,7 @@ public class BlockManager
         return blockGroup != null && blockGroup.damage(damager, block, damage);
     }
 
-    public boolean repair(Block block, int damage)
-    {
+    public boolean repair(Block block, int damage) {
         if (!this.active)
             return false;
 
@@ -70,13 +65,7 @@ public class BlockManager
         return blockGroup != null && blockGroup.repair(block, damage);
     }
 
-    public void setActive(boolean active)
-    {
-        this.active = active;
-    }
-
-    public BlockGroup getBlockGroup(Block block)
-    {
+    public BlockGroup getBlockGroup(Block block) {
         for (BlockGroup blockGroup : this.groups)
             if (blockGroup.isThis(block))
                 return blockGroup;
@@ -84,13 +73,15 @@ public class BlockManager
         return null;
     }
 
-    public boolean isActive()
-    {
+    public boolean isActive() {
         return this.active;
     }
 
-    private void loadGroups()
-    {
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    private void loadGroups() {
         JsonArray defaultBlockGroup = new JsonArray();
         defaultBlockGroup.add(new JsonPrimitive("GRASS, 0"));
         defaultBlockGroup.add(new JsonPrimitive("DIRT, 1"));
@@ -99,9 +90,9 @@ public class BlockManager
         JsonArray defaultBlockGroups = new JsonArray();
         defaultBlockGroups.add(defaultBlockGroup);
 
-        JsonArray blockGroups = SamaGamesAPI.get().getGameManager().getGameProperties().getOption("blocks", defaultBlockGroups).getAsJsonArray();
+        JsonArray blockGroups = SamaGamesAPI.get().getGameManager().getGameProperties().getMapProperty("blocks", defaultBlockGroups).getAsJsonArray();
 
-        for(JsonElement data : blockGroups)
+        for (JsonElement data : blockGroups)
             this.groups.add(new BlockGroup(data.getAsJsonArray()));
     }
 }

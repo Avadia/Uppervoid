@@ -31,37 +31,31 @@ import java.util.Random;
  * You should have received a copy of the GNU General Public License
  * along with Uppervoid.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class SpeedPowerup extends UppervoidPowerup
-{
+public class SpeedPowerup extends UppervoidPowerup {
     private final Random random;
 
-    public SpeedPowerup(Uppervoid plugin, Arena arena)
-    {
+    public SpeedPowerup(Uppervoid plugin, Arena arena) {
         super(plugin, arena);
 
         this.random = new Random();
     }
 
     @Override
-    public void onPickup(Player player)
-    {
+    public void onPickup(Player player) {
         player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 8 * 20, 2));
 
-        new BukkitRunnable()
-        {
+        new BukkitRunnable() {
             private int ticks = 0;
 
             @Override
-            public void run()
-            {
+            public void run() {
                 ParticleEffect.ParticleColor color = new ParticleEffect.OrdinaryColor(random.nextInt(255), random.nextInt(255), random.nextInt(255));
 
                 Location location = player.getLocation();
                 location.setPitch(0);
                 location.add(0, 0.7, 0);
 
-                for (double i = 0; i <= 8; i++)
-                {
+                for (double i = 0; i <= 8; i++) {
                     location.add(0, 0.1, 0);
                     ParticleEffect.REDSTONE.display(color, location, 120.0D);
                 }
@@ -75,26 +69,22 @@ public class SpeedPowerup extends UppervoidPowerup
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return ChatColor.AQUA + "Vitesse : 8 secondes";
     }
 
     @Override
-    public ItemStack getIcon()
-    {
+    public ItemStack getIcon() {
         return new Potion(PotionType.SPEED).toItemStack(1);
     }
 
     @Override
-    public double getWeight()
-    {
+    public double getWeight() {
         return 15;
     }
 
     @Override
-    public boolean isSpecial()
-    {
+    public boolean isSpecial() {
         return false;
     }
 }

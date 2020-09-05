@@ -33,8 +33,7 @@ import java.util.HashMap;
  * You should have received a copy of the GNU General Public License
  * along with Uppervoid.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class ArenaPlayer extends GamePlayer
-{
+public class ArenaPlayer extends GamePlayer {
     private static final int[] SHOOTER_IDs = new int[]{66, 67, 68};
     private static final int SHOOTER_DEFAULT_ID = 66;
     private static final int[] GRENADA_IDs = new int[]{69, 70, 71, 72, 73, 74};
@@ -53,8 +52,7 @@ public class ArenaPlayer extends GamePlayer
 
     private long lastChangeBlock = System.currentTimeMillis();
 
-    public ArenaPlayer(Player player)
-    {
+    public ArenaPlayer(Player player) {
         super(player);
 
         this.arena = (Arena) SamaGamesAPI.get().getGameManager().getGame();
@@ -71,57 +69,46 @@ public class ArenaPlayer extends GamePlayer
     }
 
     @Override
-    public void handleLogout()
-    {
+    public void handleLogout() {
         this.objective.removeReceiver(this.getOfflinePlayer());
     }
 
-    public void loadShop()
-    {
+    public void loadShop() {
         this.plugin.getServer().getScheduler().runTaskAsynchronously(this.plugin, () ->
         {
             IShopsManager shopsManager = SamaGamesAPI.get().getShopsManager();
             IPlayerShop player = shopsManager.getPlayer(getUUID());
 
-            try
-            {
+            try {
                 Stuff itemByName = this.arena.getItemManager().getItemByID(player.getSelectedItemFromList(SHOOTER_IDs));
                 itemByName.setOwner(this);
 
                 this.stuff.put(0, itemByName);
-            }
-            catch (Exception ignored)
-            {
+            } catch (Exception ignored) {
                 Stuff itemByID = this.arena.getItemManager().getItemByID(SHOOTER_DEFAULT_ID);
                 itemByID.setOwner(this);
                 this.stuff.put(0, itemByID);
             }
 
-            try
-            {
+            try {
 
                 Grenada grenada = (Grenada) this.arena.getItemManager().getItemByID(player.getSelectedItemFromList(GRENADA_IDs));
                 grenada.setOwner(this);
 
                 this.stuff.put(1, grenada);
-            }
-            catch (Exception ignored)
-            {
+            } catch (Exception ignored) {
                 Grenada grenada = (Grenada) this.arena.getItemManager().getItemByID(GRENADA_DEFAULT_ID);
                 grenada.setOwner(this);
 
                 this.stuff.put(1, grenada);
             }
 
-            try
-            {
+            try {
                 GrapplingHook grapplingHook = (GrapplingHook) this.arena.getItemManager().getItemByID(player.getSelectedItemFromList(GRAPPLING_HOOK_IDs));
                 grapplingHook.setOwner(this);
 
                 this.stuff.put(2, grapplingHook);
-            }
-            catch (Exception ignored)
-            {
+            } catch (Exception ignored) {
                 GrapplingHook grapplingHook = (GrapplingHook) this.arena.getItemManager().getItemByID(GRAPPLING_HOOK_DEFAULT_ID);
                 grapplingHook.setOwner(this);
 
@@ -130,25 +117,21 @@ public class ArenaPlayer extends GamePlayer
         });
     }
 
-    public void updateLastChangeBlock()
-    {
+    public void updateLastChangeBlock() {
         this.lastChangeBlock = System.currentTimeMillis();
     }
 
-    public void checkAntiAFK()
-    {
+    public void checkAntiAFK() {
         long time = System.currentTimeMillis();
 
-        if (!this.arena.getBlockManager().isActive())
-        {
+        if (!this.arena.getBlockManager().isActive()) {
             this.updateLastChangeBlock();
             return;
         }
 
         long duration = time - lastChangeBlock;
 
-        if (duration > 900)
-        {
+        if (duration > 900) {
             Location loc = getPlayerIfOnline().getLocation();
 
             double x = loc.getX();
@@ -157,13 +140,12 @@ public class ArenaPlayer extends GamePlayer
 
             Location block = this.getPlayerStandOnBlockLocation(new Location(loc.getWorld(), x, y, z));
 
-            if(this.arena.getBlockManager().damage(this.uuid, block.getBlock()))
+            if (this.arena.getBlockManager().damage(this.uuid, block.getBlock()))
                 this.updateLastChangeBlock();
         }
     }
 
-    private Location getPlayerStandOnBlockLocation(Location locationUnderPlayer)
-    {
+    private Location getPlayerStandOnBlockLocation(Location locationUnderPlayer) {
         Location block = locationUnderPlayer.clone().add(0.3, 0, -0.3);
 
         if (block.getBlock().getType() != Material.AIR)
@@ -187,14 +169,12 @@ public class ArenaPlayer extends GamePlayer
         return locationUnderPlayer;
     }
 
-    public void giveStuff()
-    {
+    public void giveStuff() {
         this.stuff.keySet().forEach(slot -> this.getPlayerIfOnline().getInventory().setItem(slot, this.stuff.get(slot).getItem()));
         this.getPlayerIfOnline().updateInventory();
     }
 
-    public void updateScoreboard()
-    {
+    public void updateScoreboard() {
         this.objective.setLine(0, ChatColor.RED + "");
         this.objective.setLine(1, ChatColor.GRAY + "Pièces " + ChatColor.WHITE + ":" + ChatColor.GOLD + " " + this.coins);
         this.objective.setLine(2, ChatColor.GRAY + "");
@@ -203,61 +183,23 @@ public class ArenaPlayer extends GamePlayer
     }
 
 
-    public void setScoreboard()
-    {
+    public void setScoreboard() {
         this.objective.addReceiver(this.getOfflinePlayer());
     }
 
-    public void setScoreboardTime(String time)
-    {
+    public void setScoreboardTime(String time) {
         this.objective.setDisplayName(ChatColor.RED + "" + ChatColor.BOLD + "Uppervoid" + ChatColor.WHITE + " | " + ChatColor.AQUA + time);
         this.updateScoreboard();
     }
 
-    public void setReloading(long ticks)
-    {
-        final long temp = ticks;
-
-        this.reloading = true;
-        this.getPlayerIfOnline().setExp(0);
-
-        BukkitTask xpDisplaying = this.plugin.getServer().getScheduler().runTaskTimer(this.plugin, () ->
-        {
-            if (this.getPlayerIfOnline() == null)
-                return;
-
-            float xp = this.getPlayerIfOnline().getExp();
-            xp += (100 / (temp / 2)) / 100;
-
-            if (xp >= 1)
-                xp = 1;
-
-            this.getPlayerIfOnline().setExp(xp);
-        }, 0L, 2L);
-
-        this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () ->
-        {
-            if (this.getPlayerIfOnline() == null)
-                return;
-
-            this.reloading = false;
-            this.getPlayerIfOnline().setExp(1);
-
-            xpDisplaying.cancel();
-        }, ticks);
-    }
-
-    public Stuff getStuffInHand()
-    {
+    public Stuff getStuffInHand() {
         return this.stuff.get(this.getPlayerIfOnline().getInventory().getHeldItemSlot());
     }
 
-    public boolean isOnSameBlock()
-    {
+    public boolean isOnSameBlock() {
         Location location = this.getPlayerIfOnline().getLocation();
 
-        if (this.lastLoc == null)
-        {
+        if (this.lastLoc == null) {
             this.lastLoc = location;
             return true;
         }
@@ -279,8 +221,39 @@ public class ArenaPlayer extends GamePlayer
         return result;
     }
 
-    public boolean isReloading()
-    {
+    public boolean isReloading() {
         return this.reloading;
+    }
+
+    public void setReloading(long ticks) {
+        final long temp = ticks;
+
+        this.reloading = true;
+        this.getPlayerIfOnline().setExp(0);
+
+        BukkitTask xpDisplaying = this.plugin.getServer().getScheduler().runTaskTimer(this.plugin, () ->
+        {
+            if (this.getPlayerIfOnline() == null)
+                return;
+
+            float xp = this.getPlayerIfOnline().getExp();
+            xp += (100.0 / (temp / 2.0)) / 100.0;
+
+            if (xp >= 1)
+                xp = 1;
+
+            this.getPlayerIfOnline().setExp(xp);
+        }, 0L, 2L);
+
+        this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () ->
+        {
+            if (this.getPlayerIfOnline() == null)
+                return;
+
+            this.reloading = false;
+            this.getPlayerIfOnline().setExp(1);
+
+            xpDisplaying.cancel();
+        }, ticks);
     }
 }
