@@ -82,13 +82,25 @@ public class BlockManager {
     }
 
     private void loadGroups() {
-        JsonArray defaultBlockGroup = new JsonArray();
-        defaultBlockGroup.add(new JsonPrimitive("GRASS, 0"));
-        defaultBlockGroup.add(new JsonPrimitive("DIRT, 1"));
-        defaultBlockGroup.add(new JsonPrimitive("DIRT, 2"));
+        JsonArray grassBlockGroup = new JsonArray();
+        grassBlockGroup.add(new JsonPrimitive("GRASS, 0"));
+        grassBlockGroup.add(new JsonPrimitive("DIRT, 1"));
+        grassBlockGroup.add(new JsonPrimitive("DIRT, 2"));
+
+        JsonArray clayBlockGroup = new JsonArray();
+        clayBlockGroup.add(new JsonPrimitive("STAINED_CLAY, 5"));
+        clayBlockGroup.add(new JsonPrimitive("STAINED_CLAY, 4"));
+        clayBlockGroup.add(new JsonPrimitive("STAINED_CLAY, 14"));
+
+        JsonArray sandBlockGroup = new JsonArray();
+        sandBlockGroup.add(new JsonPrimitive("SANDSTONE, 0"));
+        sandBlockGroup.add(new JsonPrimitive("SAND, 0"));
+        sandBlockGroup.add(new JsonPrimitive("SAND, 1"));
 
         JsonArray defaultBlockGroups = new JsonArray();
-        defaultBlockGroups.add(defaultBlockGroup);
+        defaultBlockGroups.add(grassBlockGroup);
+        defaultBlockGroups.add(clayBlockGroup);
+        defaultBlockGroups.add(sandBlockGroup);
 
         JsonArray blockGroups = SamaGamesAPI.get().getGameManager().getGameProperties().getMapProperty("blocks", defaultBlockGroups).getAsJsonArray();
 
