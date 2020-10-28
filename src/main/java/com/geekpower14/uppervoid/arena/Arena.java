@@ -103,7 +103,8 @@ public class Arena extends Game<ArenaPlayer> {
         this.powerupManager.registerPowerup(new SlownessPowerup(plugin, this));
         this.powerupManager.registerPowerup(new RepairPowerup(plugin, this));
 
-        this.powerupManager.registerArea(Area.str2area(properties.getMapProperties().get("powerups-spawns").getAsString()));
+        if (properties.getMapProperties().has("powerups-spawns"))
+            this.powerupManager.registerArea(Area.str2area(properties.getMapProperties().get("powerups-spawns").getAsString()));
 
         SamaGamesAPI.get().getSkyFactory().setDimension(this.plugin.getServer().getWorld("world"), dimension);
     }
