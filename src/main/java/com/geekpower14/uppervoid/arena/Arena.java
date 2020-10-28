@@ -11,6 +11,7 @@ import net.samagames.api.SamaGamesAPI;
 import net.samagames.api.games.Game;
 import net.samagames.api.games.IGameProperties;
 import net.samagames.api.games.Status;
+import net.samagames.tools.Area;
 import net.samagames.tools.LocationUtils;
 import net.samagames.tools.PlayerUtils;
 import net.samagames.tools.powerups.PowerupManager;
@@ -102,10 +103,7 @@ public class Arena extends Game<ArenaPlayer> {
         this.powerupManager.registerPowerup(new SlownessPowerup(plugin, this));
         this.powerupManager.registerPowerup(new RepairPowerup(plugin, this));
 
-        JsonArray powerupsSpawnsJson = properties.getMapProperty("powerups-spawns", spawnDefault).getAsJsonArray();
-
-        for (int i = 0; i < powerupsSpawnsJson.size(); i++)
-            this.powerupManager.registerLocation(LocationUtils.str2loc(powerupsSpawnsJson.get(i).getAsString()));
+        this.powerupManager.registerArea(Area.str2area(properties.getMapProperties().get("powerups-spawns").getAsString()));
 
         SamaGamesAPI.get().getSkyFactory().setDimension(this.plugin.getServer().getWorld("world"), dimension);
     }
