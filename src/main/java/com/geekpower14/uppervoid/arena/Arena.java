@@ -243,7 +243,9 @@ public class Arena extends Game<ArenaPlayer> {
             }
         });
 
-        if (this.getInGamePlayers().size() == 1 && getStatus().equals(Status.IN_GAME)) {
+        if (this.getInGamePlayers().isEmpty() && getStatus().equals(Status.IN_GAME)) {
+            this.win();
+        } else if (this.getInGamePlayers().size() == 1 && getStatus().equals(Status.IN_GAME)) {
             this.second = player;
             this.win();
         } else if (this.getInGamePlayers().size() == 2 && getStatus().equals(Status.IN_GAME)) {
@@ -275,6 +277,8 @@ public class Arena extends Game<ArenaPlayer> {
     }
 
     public Player getWinner() {
+        if (this.getInGamePlayers().isEmpty())
+            return null;
         return this.getInGamePlayers().values().iterator().next().getPlayerIfOnline();
     }
 
